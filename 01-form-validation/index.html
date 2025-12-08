@@ -3,52 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Validation</title>
-    <link rel="shortcut icon" href="../mern.jpg" type="image/x-icon">
+    <title>Modern Theme with Validation</title>
+    <style>
+        body {
+            background-color: black;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 5px;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+        background: linear-gradient(120deg, #222, #333);
+        padding: 20px;
+        display: flex;
+        border-radius: 20px;
+        box-shadow: 5px 5px 20px #2d1bef, -5px -5px 20px #0af; /* initial shadow */
+        flex-direction: column;
+        gap: 10px;
+        height: auto;
+        width: 400px;
+        transition: all 0.3s ease-in-out; /* smooth shadow & transform */
+        border: 2px solid #444;
+    }
+     .container:hover {
+        transform: translateY(-5px); /* lift effect */
+        box-shadow: 10px 10px 30px #2d1bef, -10px -10px 30px #0af; /* stronger shadow on hover */
+        border-color: #2d1bef; /* highlight border */
+    }
+        h3 {
+            text-align: center;
+            font-size: 2em;
+            color: blue;
+        }
+        .fields {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        label {
+            color: #fff;
+            font-size: medium;
+        }
+        input {
+            background-color: #333;
+            color: #fff;
+            border-radius: 5px;
+            outline: none;
+            border: none;
+            font-size: large;
+            padding: 10px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: large;
+            outline: none;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            background: #2d1bef;
+            color: #fff;
+        }
+        button:hover {
+            background: #2d1befd3;
+            transition: 0.3s ease-in-out;
+            cursor: pointer;
+        }
+        .toggle-password {
+            margin-top: 5px;
+            font-size: small;
+            color: #0af;
+            cursor: pointer;
+            text-align: right;
+        }
+    </style>
 </head>
-<body style="background-color: black; padding: 30px; display: flex; justify-items: center; align-items: center;">
-
-    <form id="form" style="background-color: azure; padding: 20px; border-radius: 50px; display: flex; justify-items: center; align-items: center; gap: 10px; flex-direction: column;"
-        >
-        <label style="color: red;" for="name">Name: </label> 
-        <input type="text" name="name" id="name" style="padding: 10px; border-radius: 20px; color: black;">
-        <label style="color: red;" for="email">Email: </label> 
-        <input type="email" name="email" id="email" style="padding: 10px; border-radius: 20px; color: black;">
-        <label style="color: red;" for="password">Password: </label> 
-        <input type="password" name="password" id="password" style="padding: 10px; border-radius: 20px; color: black;">
-        <button type="submit" id="btn" style="background-color: #02d502; padding: 5px 10px; color: azure; border-radius: 20px;">Submit</button>
+<body>
+    <form class="container" id="registerForm">
+        <h3>Register</h3>
+        <div class="fields">
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Enter your name">
+        </div>
+        <div class="fields">
+            <label for="email">Email</label>
+            <input type="text" id="email" placeholder="Enter email">
+        </div>
+        <div class="fields">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter Password">
+            <span class="toggle-password" onclick="togglePassword()">Show Password</span>
+        </div>
+        <button type="submit">Submit</button>
     </form>
 
     <script>
-        const form = document.getElementById("form");
-
-        form.addEventListener("submit", (e) => {
-            e.preventDefault();
-
-            let name = document.querySelector("#name").value.trim()
-            let email = document.querySelector("#email").value.trim()
-            let password = document.querySelector("#password").value
-            let btn = document.querySelector("#btn")
-
-            if(!name){
-                  alert("Enter the name")
-                  return
+        // Toggle password visibility
+        function togglePassword() {
+            const pwd = document.getElementById('password');
+            const toggleText = document.querySelector('.toggle-password');
+            if (pwd.type === 'password') {
+                pwd.type = 'text';
+                toggleText.textContent = 'Hide Password';
+            } else {
+                pwd.type = 'password';
+                toggleText.textContent = 'Show Password';
             }
-            if(!email.includes("@")){
-                  alert("Enter correct email")
-                  return
-            }
-            if(password.length < 6){
-                  alert("Password must be atleast 6 charcter long")
-                  return
-            }
-             alert("Form submitted")
-             console.log("Form Data", {name, email, password})
-        })
+        }
 
-       
+        // Form validation
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // prevent form submission
 
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            let messages = [];
+
+            if (name === '') {
+                messages.push('Name is required.');
+            }
+            if (email === '') {
+                messages.push('Email is required.');
+            } else if (!email.includes('@')) {
+                messages.push('Email must contain "@" symbol.');
+            }
+            if (password === '') {
+                messages.push('Password is required.');
+            }
+
+            if (messages.length > 0) {
+                alert(messages.join('\n'));
+            } else {
+                alert(`Registration Successful!\nName: ${name}\nEmail: ${email}\nPassword: ${password}`);
+                // Optionally, you can submit the form here if using backend
+                // e.target.submit();
+            }
+        });
     </script>
-    
 </body>
 </html>
