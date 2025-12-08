@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Animated Circle Border</title>
+  <style>
+    :root{
+      --size: 320px;
+      --thickness: 12px;
+      --inner-bg: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.03), transparent 25%),
+                    linear-gradient(180deg,#0f1724,#071024);
+      --accent-1: #ff6b6b;
+      --accent-2: #ffbe76;
+      --accent-3: #6be0ff;
+      --accent-4: #8affc1;
+      --speed: 6s;
+    }
+
+    html,body{height:100%;}
+    body{
+      display:grid;
+      place-items:center;
+      background: radial-gradient(circle at 20% 20%, #091423 0%, #01040a 60%, #000000 100%);
+      font-family:Inter, ui-sans-serif;
+      color:white;
+      padding:40px;
+    }
+
+    .ring{
+      width:var(--size);
+      height:var(--size);
+      position:relative;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      filter:drop-shadow(0 12px 35px rgba(0,0,0,0.6));
+    }
+
+    /* Animated border */
+    .ring::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:50%;
+      padding:var(--thickness);
+      background: conic-gradient(from 0deg, var(--accent-1), var(--accent-2), var(--accent-3), var(--accent-4), var(--accent-1));
+      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - var(--thickness)), black calc(100% - var(--thickness)));
+      mask: radial-gradient(farthest-side, transparent calc(100% - var(--thickness)), black calc(100% - var(--thickness)));
+      animation: spin var(--speed) linear infinite;
+    }
+
+    /* On hover — slightly faster spin */
+    .ring:hover::before{
+      animation-duration: 3s;
+    }
+
+    /* Inner content area */
+    .ring::after{
+      content:"";
+      position:absolute;
+      inset:calc(var(--thickness));
+      border-radius:50%;
+      background: var(--inner-bg);
+      backdrop-filter: blur(6px) saturate(120%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .content{
+      position:relative;
+      z-index:3;
+      text-align:center;
+      padding:24px;
+    }
+
+    .content h1{
+      margin:0;
+      font-size:1.6rem;
+      letter-spacing:0.5px;
+    }
+
+    .content p{
+      margin:8px 0 0;
+      opacity:0.8;
+      font-size:.95rem;
+    }
+
+    @keyframes spin{
+      from{transform:rotate(0deg);}
+      to{transform:rotate(360deg);}
+    }
+
+    @media(max-width:420px){
+      :root{--size:240px;}
+      .content h1{font-size:1.3rem;}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ring">
+    <div class="content">
+      <h1>Glow Ring</h1>
+      <p>Pure CSS animated border</p>
+    </div>
+  </div>
+
+</body>
+</html>
